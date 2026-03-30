@@ -28,13 +28,16 @@ public class Pipeline {
             return true;
         }
 
-        if ("success".equals(project.runTests())) {
+        String testResult = project.runTests();
+        boolean testsPassed = "success".equals(testResult);
+
+        if (testsPassed) {
             log.info("Tests passed");
-            return true;
         } else {
             log.error("Tests failed");
-            return false;
         }
+
+        return testsPassed;
     }
 
     private boolean runDeployment(Project project, boolean testsPassed) {
@@ -42,13 +45,16 @@ public class Pipeline {
             return false;
         }
 
-        if ("success".equals(project.deploy())) {
+        String deployResult = project.deploy();
+        boolean deploySuccessful = "success".equals(deployResult);
+
+        if (deploySuccessful) {
             log.info("Deployment successful");
-            return true;
         } else {
             log.error("Deployment failed");
-            return false;
         }
+
+        return deploySuccessful;
     }
 
     private void sendEmailIfNeeded(boolean testsPassed, boolean deploySuccessful) {
